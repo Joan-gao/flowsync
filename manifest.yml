@@ -1,0 +1,19 @@
+modules:
+  confluence:globalPage:
+    - key: flowsync-hello-world-global-page
+      resource: main
+      render: native
+      resolver:
+        function: resolver
+      title: flowsync
+      route: hello-world
+  function:
+    - key: resolver
+      handler: index.handler
+resources:
+  - key: main
+    path: src/frontend/index.jsx
+app:
+  runtime:
+    name: nodejs22.x
+  id: ari:cloud:ecosystem::app/54840470-cf5f-4eef-89fc-a905fc8e91fb
