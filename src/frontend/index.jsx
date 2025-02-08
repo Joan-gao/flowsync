@@ -106,9 +106,7 @@ const App = () => {
         {/* Buttons */}
         <FormFooter>
           <ButtonGroup>
-            <Button appearance="subtle" onClick={onClickRestart}>
-              Regenerate
-            </Button>
+            <Button appearance="subtle">Regenerate</Button>
             <Button type="submit" appearance="primary">
               Submit
             </Button>
