@@ -146,39 +146,39 @@ const App = () => {
               Give your project a cool name! 🎯 <RequiredAsterisk />
             </Label>
             <Textfield
-              {...register('name', { required: true })}
+              {...register('name')}
               placeholder="e.g., SuperApp Development"
             />
           </Box>
           <Box>
             <Label labelFor={getFieldId('intro')}>
-              Tell me more about your project! 📝 <RequiredAsterisk />
+              Tell me more about your project! 📝
             </Label>
             <TextArea
               placeholder="e.g., We are building an app to track daily habits"
-              {...register('intro', { required: true })}
+              {...register('intro')}
             />
           </Box>
           <Box>
             <Label labelFor={getFieldId('startdate')}>
-              When will the project start? 📅 <RequiredAsterisk />
+              When will the project start? 📅
             </Label>
             <DatePicker {...register('startdate')} />
           </Box>
           <Box>
             <Label labelFor={getFieldId('enddate')}>
-              What’s the DDL? ⏳<RequiredAsterisk />
+              What’s the DDL? ⏳
             </Label>
             <DatePicker {...register('enddate')} />
           </Box>
           <Box>
             <Label labelFor={getFieldId('team')}>
               Who’s on your team? Introduce them! (Name, work direction, and
-              Availability) 👥 <RequiredAsterisk />
+              availability) 👥
             </Label>
             <TextArea
               placeholder="e.g., Alice (Frontend, Available Monday to Friday), Bob (Backend, Available Mondays 9:00 AM - 5:00 PM), John (Product Manager, Available on Weekends) 💻"
-              {...register('team', { required: true })}
+              {...register('team')}
             />
           </Box>
           <Box>
