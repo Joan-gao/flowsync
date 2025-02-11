@@ -4,11 +4,11 @@ modules:
       resource: main
       render: native
       resolver:
-        function: resolver
+        function: create-page
       title: flowsync
       route: hello-world
   function:
-    - key: resolver
+    - key: create-page
       handler: index.handler
 resources:
   - key: main
@@ -17,3 +17,23 @@ app:
   runtime:
     name: nodejs22.x
   id: ari:cloud:ecosystem::app/54840470-cf5f-4eef-89fc-a905fc8e91fb
+permissions:
+  scopes:
+    - read:confluence-content.summary
+    - write:confluence-content
+    - write:confluence-file
+    - read:whiteboard:confluence
+    - write:whiteboard:confluence
+    - read:jira-work
+    - write:jira-work
+    - write:issue:jira
+    - write:comment:jira
+    - write:comment.property:jira
+    - write:attachment:jira
+    - read:issue:jira
+    - write:project:jira
+    - read:project:jira
+  external:
+    fetch:
+      backend:
+        - "https://xgao.atlassian.net"

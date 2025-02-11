@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import ForgeReconciler, {
   Box,
   Strong,
@@ -17,20 +17,46 @@ import ForgeReconciler, {
   Textfield,
   useForm,
   Heading,
-} from '@forge/react';
-
+} from "@forge/react";
+import { invoke } from "@forge/bridge";
 const App = () => {
   const [showForm, setShowForm] = useState(false); // 控制是否显示表单
   const [showResponsePage, setShowResponsePage] = useState(false); // 控制是否显示响应页面
   const [formData, setFormData] = useState({}); // 存储表单数据
-
+  const [error, setError] = useState(null); // 存储表单数据
+  const [isSubmitting, setIsSubmitting] = useState(false); // 存储表单数据
   const { getFieldId, register, handleSubmit } = useForm();
 
   // 表单提交逻辑
-  const onSubmit = (data) => {
-    console.log('Form Data:', data);
-    setFormData(data); // 保存表单数据
-    setShowResponsePage(true); // 跳转到响应页面
+  const onSubmit = async (data) => {
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      // 准备发送的数据
+      const submitData = {
+        ...data,
+        fileContent: formData.fileContent, // 添加文件内容
+        fileName: formData.fileName, // 添加文件名
+      };
+
+      const response = await invoke("create-page", {
+        submitData,
+      });
+
+      if (!response.success) {
+        throw new Error(response.error || "Failed to create page");
+      }
+
+      console.log("Page created successfully:", response);
+      setShowResponsePage(true);
+      reset();
+    } catch (err) {
+      setError(err.message || "Failed to create page");
+      console.error("Error creating page:", err);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const onClickStart = () => {
@@ -47,17 +73,17 @@ const App = () => {
       <Box
         padding="space.400"
         xcss={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh',
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
         }}
       >
         <Stack space="space.300" alignInline="center">
           <Heading as="h1">Welcome to FlowSync!😉</Heading>
           <Text>
             <Strong>
-              Tired of endless planning and manually creating Jira tasks? 😖{' '}
+              Tired of endless planning and manually creating Jira tasks? 😖{" "}
             </Strong>
           </Text>
           <Text>Let our tool automate the process! 🚀</Text>
@@ -80,7 +106,7 @@ const App = () => {
     return (
       <Form
         onSubmit={handleSubmit((feedbackData) => {
-          console.log('Feedback:', feedbackData.feedback);
+          console.log("Feedback:", feedbackData.feedback);
         })}
       >
         <FormSection>
@@ -91,12 +117,12 @@ const App = () => {
             </Text>
             {/* Feedback Section */}
             <Box>
-              <Label labelFor={getFieldId('feedback')}>
+              <Label labelFor={getFieldId("feedback")}>
                 How can we make this plan even better? Please share your
                 thoughts!
               </Label>
               <TextArea
-                {...register('feedback')}
+                {...register("feedback")}
                 placeholder={`e.g., - Alice's current workload is too heavy. - The initial research doesn't need a full day; half a day would be sufficient. - Suggest reassigning tasks to balance workloads.`}
               />
             </Box>
@@ -142,43 +168,41 @@ const App = () => {
       <FormSection>
         <Stack space="space.200">
           <Box>
-            <Label labelFor={getFieldId('name')}>
+            <Label labelFor={getFieldId("name")}>
               Give your project a cool name! 🎯 <RequiredAsterisk />
             </Label>
             <Textfield
-              {...register('name')}
+              {...register("name")}
               placeholder="e.g., SuperApp Development"
             />
           </Box>
           <Box>
-            <Label labelFor={getFieldId('intro')}>
+            <Label labelFor={getFieldId("intro")}>
               Tell me more about your project! 📝
             </Label>
             <TextArea
               placeholder="e.g., We are building an app to track daily habits"
-              {...register('intro')}
+              {...register("intro")}
             />
           </Box>
           <Box>
-            <Label labelFor={getFieldId('startdate')}>
+            <Label labelFor={getFieldId("startdate")}>
               When will the project start? 📅
             </Label>
-            <DatePicker {...register('startdate')} />
+            <DatePicker {...register("startdate")} />
           </Box>
           <Box>
-            <Label labelFor={getFieldId('enddate')}>
-              What’s the DDL? ⏳
-            </Label>
-            <DatePicker {...register('enddate')} />
+            <Label labelFor={getFieldId("enddate")}>What’s the DDL? ⏳</Label>
+            <DatePicker {...register("enddate")} />
           </Box>
           <Box>
-            <Label labelFor={getFieldId('team')}>
+            <Label labelFor={getFieldId("team")}>
               Who’s on your team? Introduce them! (Name, work direction, and
               availability) 👥
             </Label>
             <TextArea
               placeholder="e.g., Alice (Frontend, Available Monday to Friday), Bob (Backend, Available Mondays 9:00 AM - 5:00 PM), John (Product Manager, Available on Weekends) 💻"
-              {...register('team')}
+              {...register("team")}
             />
           </Box>
           <Box>
